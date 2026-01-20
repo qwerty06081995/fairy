@@ -5,13 +5,20 @@
     "homepage": "https://www.yiiframework.com/",
     "type": "project",
     "license": "BSD-3-Clause",
-    "minimum-stability": "stable",
+    "support": {
+        "issues": "https://github.com/yiisoft/yii2/issues?state=open",
+        "forum": "https://www.yiiframework.com/forum/",
+        "wiki": "https://www.yiiframework.com/wiki/",
+        "irc": "ircs://irc.libera.chat:6697/yii",
+        "source": "https://github.com/yiisoft/yii2"
+    },
+    "minimum-stability": "dev",
     "require": {
-        "php": ">=7.2 <8.3",
+        "php": ">=7.4.0",
+        "yidas/yii2-bower-asset": "~2.0.5",
         "yiisoft/yii2": "~2.0.45",
         "yiisoft/yii2-bootstrap5": "~2.0.2",
-        "yiisoft/yii2-symfonymailer": "~2.0.3",
-        "yidas/yii2-bower-asset": "^2.0"
+        "yiisoft/yii2-symfonymailer": "~2.0.3"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",
@@ -26,16 +33,13 @@
     },
     "config": {
         "allow-plugins": {
-            "yiisoft/yii2-composer": true
+            "yiisoft/yii2-composer" : true
         },
-        "process-timeout": 1800
-    },
-    "repositories": [
-        {
-            "type": "composer",
-            "url": "https://asset-packagist.org"
+        "process-timeout": 1800,
+        "fxp-asset": {
+            "enabled": false
         }
-    ],
+    },
     "scripts": {
         "post-install-cmd": [
             "yii\\composer\\Installer::postInstall"
@@ -60,5 +64,11 @@
                 "config/web.php"
             ]
         }
-    }
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    ]
 }

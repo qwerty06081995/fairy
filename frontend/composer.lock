@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1ffd2b6ae6b990b750a5244d36b2af7e",
+    "content-hash": "a6a21f7d5ab439bad6fbd9e9941ef7db",
     "packages": [
         {
             "name": "cebe/markdown",
@@ -1281,6 +1281,75 @@
                 "source": "https://github.com/yidas/yii2-bower-asset"
             },
             "time": "2019-09-19T11:33:03+00:00"
+        },
+        {
+            "name": "yiisoft/i18n",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/yiisoft/i18n.git",
+                "reference": "30af2599be378b122aa0312edd183b457c1510d6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/yiisoft/i18n/zipball/30af2599be378b122aa0312edd183b457c1510d6",
+                "reference": "30af2599be378b122aa0312edd183b457c1510d6",
+                "shasum": ""
+            },
+            "require": {
+                "php": "8.0 - 8.5"
+            },
+            "require-dev": {
+                "bamarni/composer-bin-plugin": "^1.8.3",
+                "friendsofphp/php-cs-fixer": "^3.66",
+                "maglnet/composer-require-checker": "^4.4",
+                "phpunit/phpunit": "^9.6.22",
+                "rector/rector": "^2.0.10",
+                "spatie/phpunit-watcher": "^1.23.6"
+            },
+            "default-branch": true,
+            "type": "library",
+            "extra": {
+                "bamarni-bin": {
+                    "bin-links": true,
+                    "forward-command": true,
+                    "target-directory": "tools"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Yiisoft\\I18n\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Yii Internationalization Library",
+            "homepage": "https://www.yiiframework.com/",
+            "keywords": [
+                "i18n",
+                "locale"
+            ],
+            "support": {
+                "chat": "https://t.me/yii3en",
+                "forum": "https://www.yiiframework.com/forum/",
+                "irc": "ircs://irc.libera.chat:6697/yii",
+                "issues": "https://github.com/yiisoft/i18n/issues?state=open",
+                "source": "https://github.com/yiisoft/i18n",
+                "wiki": "https://www.yiiframework.com/wiki/"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/sponsors/yiisoft",
+                    "type": "github"
+                },
+                {
+                    "url": "https://opencollective.com/yiisoft",
+                    "type": "opencollective"
+                }
+            ],
+            "time": "2026-01-15T14:08:06+00:00"
         },
         {
             "name": "yiisoft/yii2",
@@ -5590,7 +5659,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": {},
+    "stability-flags": {
+        "yiisoft/i18n": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

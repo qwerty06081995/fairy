@@ -7,6 +7,7 @@ $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
+    'name' => 'Генератор сказок',
     'aliases' => [
         '@bower' => '@vendor/yidas/yii2-bower-asset/bower',
         '@npm'   => '@vendor/npm-asset',
@@ -42,14 +43,16 @@ $config = [
             ],
         ],
         'db' => $db,
-        /*
+
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'story' => 'story/story/index',
+                'story/result' => 'story/story/result',
             ],
         ],
-        */
+        'language' => 'ru-RU',
     ],
     'params' => $params,
 ];

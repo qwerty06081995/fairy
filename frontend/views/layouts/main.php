@@ -57,8 +57,8 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav'],
         'items' => [
-            ['label' => 'Home', 'url' => ['/site/index']],
-            ['label' => 'Story', 'url' => ['/site/story']]
+            ['label' => 'Главная', 'url' => ['/site/index']],
+            ['label' => 'Сказки', 'url' => ['/site/story']]
         ]
     ]);
     NavBar::end();

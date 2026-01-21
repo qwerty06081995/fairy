@@ -1,0 +1,9 @@
+### Send POST request with json body
+POST 127.0.0.1:8000/generate_story
+Content-Type: application/json
+
+{
+  "age": 5,
+  "language": "ru",
+  "characters": ["дракон", "фея", "кот"]
+}

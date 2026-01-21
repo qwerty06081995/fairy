@@ -4,11 +4,10 @@ namespace app\controllers;
 
 use app\modules\story\models\StoryForm;
 use app\modules\story\models\StoryHistory;
+use yii\httpclient\Client;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
-use yii\grid\GridView;
-use yii\i18n\Locale;
 use yii\web\Controller;
 use yii\web\Response;
 use yii\filters\VerbFilter;
@@ -17,7 +16,7 @@ use app\models\ContactForm;
 
 class SiteController extends Controller
 {
-    public string $story_api_url = 'http://localhost:8000/generate_story';
+    public string $story_api_url = 'http://127.0.0.1:8000/generate_story';
     /**
      * {@inheritdoc}
      */
@@ -90,17 +89,43 @@ class SiteController extends Controller
         $storyText = null;
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            
             try {
-                $response = Yii::$app->httpClient->post($this->story_api_url, [
-                    'json' => [
-                        'age' => $model->age,
-                        'language' => $model->language,
-                        'characters' => $model->characters
-                    ]
-                ]);
+                $client = new Client(); // создаём клиент
+                $response = $client->post($this->story_api_url, [
+                    'age' => $model->age,
+                    'language' => $model->language,
+                    'characters' => $model->characters
+                ])
+                    ->setFormat(Client::FORMAT_JSON) // важно для JSON
+                    ->send();
 
-                $storyText = $response->getBody()->getContents();
+                if ($response->isOk) {
+                    // Получаем тело как строку, без автоматического парсинга
+                    $raw = $response->getContent();
+                    // Найти позицию ",done_reason"
+                    $pos = strpos($raw, 'done_reason');
+
+                    if ($pos !== false) {
+                        $raw = substr($raw, 0, $pos); // обрезаем всё после
+                    }
+
+                    // Чистим лишние куски Ollama
+                    $storyText = preg_replace('/\\\"|,\\s*\"done\":(true|false)/u', '', $raw);
+
+                    // Убираем лишние кавычки и экранирование
+                    $storyText = str_replace(['\"', '"'], '', $storyText);
+
+                    // Заменяем "\n" на реальные переносы строк
+                    $storyText = str_replace(['\\n', '\n'], "\n", $storyText);
+
+                    // Если есть лишние пробелы после переносов
+                    $storyText = preg_replace("/\s+\n/", "\n", $storyText);
+
+                    $storyText = strip_tags($storyText); // на всякий случай убираем HTML теги
+
+                } else {
+                    throw new \Exception('Python-сервис вернул ошибку: '.$response->statusCode);
+                }
 
                 // Сохраняем историю
                 $history = new StoryHistory();
@@ -121,6 +146,7 @@ class SiteController extends Controller
             'storyText' => $storyText
         ]);
     }
+
 
     /**
      * Login action.

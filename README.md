@@ -51,7 +51,7 @@ return [
     pip install -r requirements.txt
 ```
 
-### 3.2. После выполните в консоле команду 
+### 3.2. После выполните в консоле команду. В Linux дистрибутивах отличается команда 
 ```python
     .\venv\Scripts\activate 
 ```

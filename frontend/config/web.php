@@ -6,7 +6,13 @@ $db = require __DIR__ . '/db.php';
 $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log'],
+    'bootstrap' => ['log', 'gii'],
+    'modules' => [
+        'gii' => [
+            'class' => 'yii\gii\Module',
+            'allowedIPs' => ['*']
+        ]
+    ],
     'name' => 'Генератор сказок',
     'aliases' => [
         '@bower' => '@vendor/yidas/yii2-bower-asset/bower',

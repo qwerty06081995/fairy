@@ -94,6 +94,7 @@ class SiteController extends Controller
                 $response = $client->post($this->story_api_url, [
                     'age' => $model->age,
                     'language' => $model->language,
+                    'genre' => $this->getGenreName($model->genre),
                     'characters' => $model->characters
                 ])
                     ->setFormat(Client::FORMAT_JSON) // важно для JSON
@@ -131,6 +132,7 @@ class SiteController extends Controller
                 $history = new StoryHistory();
                 $history->age = $model->age;
                 $history->language = $model->language;
+                $history->genre = $model->genre;
                 $history->characters = json_encode($model->characters);
                 $history->story_text = $storyText;
                 $history->created_at = date('Y-m-d H:i:s');
@@ -180,6 +182,22 @@ class SiteController extends Controller
         Yii::$app->user->logout();
 
         return $this->goHome();
+    }
+
+    private function getGenreName($id){
+        $genres = [
+            'Приключения',
+            'Фэнтези',
+            'Волшебная сказка',
+            'Комедия',
+            'Драма',
+            'Сказка о животных',
+            'Семейная сказка',
+            'Поучительная сказка',
+            'Детектив',
+            'Путешествие'
+        ];
+        return $genres[intval($id)];
     }
 
 }

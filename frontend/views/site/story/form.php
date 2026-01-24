@@ -19,6 +19,18 @@ $this->title = 'Генерация сказки';
                 echo $form->field($model, 'age');
                 echo $form->field($model, 'language')->dropDownList(['ru'=>'Русский','kk'=>'Казахский']);
                 echo $form->field($model, 'characters')->checkboxList(['Заяц','Волк','Лиса','Алдар Көсе','Әйел Арстан']);
+                echo $form->field($model, 'genre')->dropDownList([
+                    'Приключения',
+                    'Фэнтези',
+                    'Волшебная сказка',
+                    'Комедия',
+                    'Драма',
+                    'Сказка о животных',
+                    'Семейная сказка',
+                    'Поучительная сказка',
+                    'Детектив',
+                    'Путешествие'
+                ]);
                 echo Html::submitButton('Сгенерировать', ['class'=>'btn btn-primary']);
                 ActiveForm::end();
 

@@ -34,6 +34,7 @@ $this->title = 'Генератор сказок';
                             'id',
                             'age',
                             'language',
+                            'genre',
                             [
                                 'attribute' => 'characters',
                                 'value' => function($model) {

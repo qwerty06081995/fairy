@@ -10,6 +10,7 @@ app = FastAPI(title="Генератор историй API (Ollama)")
 class StoryRequest(BaseModel):
     age: int = Field(..., gt=0)
     language: str
+    genre: str
     characters: list[str] = Field(..., min_length=1)
 
     @field_validator("language")
@@ -25,13 +26,14 @@ async def generate_story(request: StoryRequest):
     prompt = (
         f"Напиши добрую детскую сказку на {request.language} языке "
         f"для ребёнка {request.age} лет, "
-        f"с персонажами: {', '.join(request.characters)}."
+        f"с персонажами: {', '.join(request.characters)}. Жанр: {request.genre}"
     )
 
     def stream():
         yield f"# Сказка для {request.age}-летнего ребёнка\n"
         yield f"**Язык:** {'русский' if request.language == 'ru' else 'казахский'}\n"
         yield f"**Персонажи:** {', '.join(request.characters)}\n\n"
+        yield f"**Жанр:** {request.genre}\n\n"
 
         # ===== Стриминг с Ollama =====
         # Ollama должен быть установлен и работать локально

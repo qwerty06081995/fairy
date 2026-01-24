@@ -82,73 +82,55 @@ class SiteController extends Controller
             'dataProvider'=>$dataProvider
         ]);
     }
-
-    public function actionForm(): string
+    public function actionForm()
     {
         $model = new StoryForm();
-        $storyText = null;
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            try {
-                $client = new Client(); // создаём клиент
-                $response = $client->post($this->story_api_url, [
-                    'age' => $model->age,
-                    'language' => $model->language,
-                    'genre' => $this->getGenreName($model->genre),
-                    'characters' => $model->characters
-                ])
-                    ->setFormat(Client::FORMAT_JSON) // важно для JSON
-                    ->send();
 
-                if ($response->isOk) {
-                    // Получаем тело как строку, без автоматического парсинга
-                    $raw = $response->getContent();
-                    // Найти позицию ",done_reason"
-                    $pos = strpos($raw, 'done_reason');
+            //  Заголовки — ТОЛЬКО через PHP
+            header('Content-Type: text/markdown; charset=utf-8');
+            header('Cache-Control: no-cache');
+            header('X-Accel-Buffering: no');
 
-                    if ($pos !== false) {
-                        $raw = substr($raw, 0, $pos); // обрезаем всё после
-                    }
-
-                    // Чистим лишние куски Ollama
-                    $storyText = preg_replace('/\\\"|,\\s*\"done\":(true|false)/u', '', $raw);
-
-                    // Убираем лишние кавычки и экранирование
-                    $storyText = str_replace(['\"', '"'], '', $storyText);
-
-                    // Заменяем "\n" на реальные переносы строк
-                    $storyText = str_replace(['\\n', '\n'], "\n", $storyText);
-
-                    // Если есть лишние пробелы после переносов
-                    $storyText = preg_replace("/\s+\n/", "\n", $storyText);
-
-                    $storyText = strip_tags($storyText); // на всякий случай убираем HTML теги
-
-                } else {
-                    throw new \Exception('Python-сервис вернул ошибку: '.$response->statusCode);
-                }
-
-                // Сохраняем историю
-                $history = new StoryHistory();
-                $history->age = $model->age;
-                $history->language = $model->language;
-                $history->genre = $model->genre;
-                $history->characters = json_encode($model->characters);
-                $history->story_text = $storyText;
-                $history->created_at = date('Y-m-d H:i:s');
-                $history->save();
-
-            } catch (\Exception $e) {
-                Yii::$app->session->setFlash('error', 'Python-сервис недоступен: '.$e->getMessage());
+            // Отключаем буферы
+            while (ob_get_level() > 0) {
+                ob_end_flush();
             }
+            ob_implicit_flush(true);
+
+            $ch = curl_init($this->story_api_url);
+
+            curl_setopt_array($ch, [
+                CURLOPT_POST => true,
+                CURLOPT_HTTPHEADER => [
+                    'Content-Type: application/json',
+                ],
+                CURLOPT_POSTFIELDS => json_encode([
+                    'age'        => $model->age,
+                    'language'   => $model->language,
+                    'genre'      => $this->getGenreName($model->genre),
+                    'characters' => $this->getCharacterName($model->characters),
+                ], JSON_UNESCAPED_UNICODE),
+                CURLOPT_RETURNTRANSFER => false,
+                CURLOPT_WRITEFUNCTION => function ($ch, $data) {
+                    echo $data;
+                    flush();
+                    return strlen($data);
+                },
+            ]);
+
+            curl_exec($ch);
+            curl_close($ch);
+
+            // Просто выходим, без Yii::$app->end()
+            exit;
         }
 
         return $this->render('story/form', [
             'model' => $model,
-            'storyText' => $storyText
         ]);
     }
-
 
     /**
      * Login action.
@@ -198,6 +180,15 @@ class SiteController extends Controller
             'Путешествие'
         ];
         return $genres[intval($id)];
+    }
+
+    private function getCharacterName($ids){
+        $arr = ['Заяц','Волк','Лиса','Алдар Көсе','Әйел Арстан'];
+        $res = [];
+        for ($i=0;$i<count($ids);$i++){
+            $res[$i] = $arr[$ids[$i]];
+        }
+        return $res;
     }
 
 }

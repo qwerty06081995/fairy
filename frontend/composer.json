@@ -20,7 +20,8 @@
         "yiisoft/yii2-bootstrap5": "~2.0.2",
         "yiisoft/yii2-symfonymailer": "~2.0.3",
         "yiisoft/i18n": "dev-master",
-        "yiisoft/yii2-httpclient": "^2.0@dev"
+        "yiisoft/yii2-httpclient": "^2.0@dev",
+        "ext-curl": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",
